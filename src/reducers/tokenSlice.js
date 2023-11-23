@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 // Initial States
 const initialToken = {};
 
+// Slice
 export const tokenSlice = createSlice({
   name: "token",
   initialState: initialToken,

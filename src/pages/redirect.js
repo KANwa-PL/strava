@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { extractAuthorizationCode, getAthlete } from "../utils/functions";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { setAthlete } from "../reducers/athleteSlice";
 import { setToken } from "../reducers/tokenSlice";
 
@@ -10,29 +10,39 @@ const Redirect = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  //Actions
+  // Actions
+  const [isFetching, setIsFetching] = useState(true);
+  useEffect(async () => {
+    const authenticate = async () => {
+      try {
+        const authorizationCode = extractAuthorizationCode(
+          window.location.href
+        );
+        const athleteRequest = await getAthlete(authorizationCode);
+        console.log(athleteRequest);
+        dispatch(setAthlete(athleteRequest.athlete));
+
+        // setFetchData(athleteRequest.athlete);
+        // dispatch(
+        //   setToken({
+        //     access_token: athleteRequest.access_token,
+        //     refresh_token: athleteRequest.refresh_token,
+        //     token_type: athleteRequest.token_type,
+        //   })
+        // );
+      } catch (error) {
+        return console.error(error.message);
+      }
+    };
+    await authenticate();
+    setIsFetching(false);
+  }, []);
+
   useEffect(() => {
-    navigate("/main", { replace: true });
-  });
-
-  const authenticate = async () => {
-    try {
-      const authorizationCode = extractAuthorizationCode(window.location.href);
-      const athleteRequest = await getAthlete(authorizationCode);
-      dispatch(setAthlete(athleteRequest.athlete));
-      dispatch(
-        setToken({
-          access_token: athleteRequest.access_token,
-          refresh_token: athleteRequest.refresh_token,
-          token_type: athleteRequest.token_type,
-        })
-      );
-    } catch (error) {
-      return console.error(error.message);
+    if (isFetching === false) {
+      navigate("/main", { replace: true });
     }
-  };
-
-  authenticate();
+  }, [isFetching]);
 
   // View
   return <div>Loading...</div>;
