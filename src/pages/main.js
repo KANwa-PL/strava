@@ -11,7 +11,6 @@ const Main = () => {
     getActivites(token.access_token);
   };
 
-  console.log("MAIN");
   // View
   return (
     <div>

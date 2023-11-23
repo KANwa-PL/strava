@@ -12,30 +12,27 @@ const Redirect = () => {
 
   // Actions
   const [isFetching, setIsFetching] = useState(true);
-  useEffect(async () => {
+  useEffect(() => {
     const authenticate = async () => {
       try {
         const authorizationCode = extractAuthorizationCode(
           window.location.href
         );
         const athleteRequest = await getAthlete(authorizationCode);
-        console.log(athleteRequest);
         dispatch(setAthlete(athleteRequest.athlete));
-
-        // setFetchData(athleteRequest.athlete);
-        // dispatch(
-        //   setToken({
-        //     access_token: athleteRequest.access_token,
-        //     refresh_token: athleteRequest.refresh_token,
-        //     token_type: athleteRequest.token_type,
-        //   })
-        // );
+        dispatch(
+          setToken({
+            access_token: athleteRequest.access_token,
+            refresh_token: athleteRequest.refresh_token,
+            token_type: athleteRequest.token_type,
+          })
+        );
+        setIsFetching(false);
       } catch (error) {
         return console.error(error.message);
       }
     };
-    await authenticate();
-    setIsFetching(false);
+    authenticate();
   }, []);
 
   useEffect(() => {
