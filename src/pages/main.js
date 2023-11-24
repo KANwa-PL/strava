@@ -11,10 +11,15 @@ const Main = () => {
     getActivites(token.access_token);
   };
 
+  console.log(token);
+
   // View
-  return (
+  return athlete === undefined ? (
+    <div>Retrieving data...</div>
+  ) : (
     <div>
       <p>Hi, {athlete.firstname}!</p>
+      <p>Your token {token.access_token}</p>
     </div>
   );
 };

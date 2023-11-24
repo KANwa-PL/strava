@@ -7,33 +7,34 @@ import { setToken } from "../reducers/tokenSlice";
 
 const Redirect = () => {
   // Variables
+  const [isFetching, setIsFetching] = useState(true);
+  const [authorizationCode, setAuthorizationCode] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   // Actions
-  const [isFetching, setIsFetching] = useState(true);
+  useEffect(() => {
+    setAuthorizationCode(extractAuthorizationCode(window.location.href));
+  });
+
   useEffect(() => {
     const authenticate = async () => {
       try {
-        const authorizationCode = extractAuthorizationCode(
-          window.location.href
-        );
         const athleteRequest = await getAthlete(authorizationCode);
+        console.log(athleteRequest.access_token);
         dispatch(setAthlete(athleteRequest.athlete));
-        dispatch(
-          setToken({
-            access_token: athleteRequest.access_token,
-            refresh_token: athleteRequest.refresh_token,
-            token_type: athleteRequest.token_type,
-          })
-        );
-        setIsFetching(false);
+        dispatch(setToken(athleteRequest.access_token));
       } catch (error) {
-        return console.error(error.message);
+        console.error(error.message);
       }
     };
-    authenticate();
-  }, []);
+
+    if (authorizationCode !== "") {
+      authenticate();
+    }
+
+    setIsFetching(false);
+  }, [authorizationCode]);
 
   useEffect(() => {
     if (isFetching === false) {

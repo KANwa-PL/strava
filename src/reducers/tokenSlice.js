@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-// Initial States
+// Initial State
 const initialToken = {};
 
 // Slice
-export const tokenSlice = createSlice({
+const tokenSlice = createSlice({
   name: "token",
   initialState: initialToken,
   reducers: {
