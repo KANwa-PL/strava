@@ -1,25 +1,24 @@
-import { useSelector } from "react-redux";
-import { getActivites } from "../utils/functions";
+import { useDispatch, useSelector } from "react-redux";
+import { setActivites } from "../reducers/activitySlice";
+import { useEffect } from "react";
 
 const Main = () => {
   // Variables
-  const athlete = useSelector((store) => store.athlete.athlete);
-  const token = useSelector((store) => store.token);
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.token.token);
+  const activitiesStatus = useSelector((state) => state.athlete.status);
+  const activities = useSelector((state) => state.athlete.activities);
 
   //Actions
-  const retrieveActivities = (token) => {
-    getActivites(token.access_token);
-  };
-
-  console.log(token);
+  useEffect(() => {
+    dispatch(setActivites());
+  });
 
   // View
-  return athlete === undefined ? (
-    <div>Retrieving data...</div>
-  ) : (
+  return (
     <div>
-      <p>Hi, {athlete.firstname}!</p>
-      <p>Your token {token.access_token}</p>
+      <p>Hi, {token.athlete.firstname}!</p>
+      <p>Activity: {activities}</p>
     </div>
   );
 };

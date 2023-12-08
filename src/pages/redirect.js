@@ -1,49 +1,29 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { extractAuthorizationCode, getAthlete } from "../utils/functions";
-import { useEffect, useState } from "react";
-import { setAthlete } from "../reducers/athleteSlice";
-import { setToken } from "../reducers/tokenSlice";
+import { getTokens } from "../reducers/tokenSlice";
 
 const Redirect = () => {
   // Variables
-  const [isFetching, setIsFetching] = useState(true);
-  const [authorizationCode, setAuthorizationCode] = useState("");
-  const navigate = useNavigate();
+  const authorizationStatus = useSelector((state) => state.token.status);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // Actions
-  useEffect(() => {
-    setAuthorizationCode(extractAuthorizationCode(window.location.href));
-  });
-
-  useEffect(() => {
-    const authenticate = async () => {
-      try {
-        const athleteRequest = await getAthlete(authorizationCode);
-        console.log(athleteRequest.access_token);
-        dispatch(setAthlete(athleteRequest.athlete));
-        dispatch(setToken(athleteRequest.access_token));
-      } catch (error) {
-        console.error(error.message);
-      }
-    };
-
-    if (authorizationCode !== "") {
-      authenticate();
-    }
-
-    setIsFetching(false);
-  }, [authorizationCode]);
-
-  useEffect(() => {
-    if (isFetching === false) {
-      navigate("/main", { replace: true });
-    }
-  }, [isFetching]);
+  if (authorizationStatus === "idle") {
+    dispatch(getTokens());
+  } else if (authorizationStatus === "success") {
+    navigate("/main", { replace: true });
+  }
 
   // View
-  return <div>Loading...</div>;
+  return authorizationStatus === "idle" ? (
+    <div>Retrieving data...</div>
+  ) : (
+    <div>
+      <div>{authorizationStatus}</div>
+      <div>Loading data...</div>
+    </div>
+  );
 };
 
 export default Redirect;

@@ -1,7 +1,14 @@
+import moment from "moment";
+
+/**
+ * Variables
+ */
+const today = moment().unix();
+const oneMonthAgo = moment().subtract(1, "month").unix();
 const REACT_APP_CLIENT_ID = "77577";
-const REACT_APP_CLIENT_SECRET = "1d9016215ea3a224427a515d424bab9a7a7cbda8";
+const REACT_APP_CLIENT_SECRET = "cef5a0596d8b1da5e4c976eeab5aa77857eeb164";
 const REDIRECT_URL = "http://localhost:3000/redirect";
-const SCOPE = "activity:read_all,profile:read_all,activity:write";
+const SCOPE = "activity:read,profile:read_all,activity:write";
 
 /**
  * Extracts authorization code from redirect URL.
@@ -25,7 +32,7 @@ export const getLogin = () => {
  * @param {string} authorizationCode
  * @returns
  */
-export const getAthlete = async (authorizationCode) => {
+export const getData = async (authorizationCode) => {
   try {
     const response = await fetch(
       `https://www.strava.com/api/v3/oauth/token?client_id=${REACT_APP_CLIENT_ID}&client_secret=${REACT_APP_CLIENT_SECRET}&code=${authorizationCode}&grant_type=authorization_code`,
@@ -47,11 +54,12 @@ export const getAthlete = async (authorizationCode) => {
 export const getActivites = async (accessToken) => {
   try {
     const response = await fetch(
-      `http GET "https://www.strava.com/api/v3/athlete/activities`,
+      `https://www.strava.com/api/v3/athlete/activities?before=${today}?after=${oneMonthAgo}?per_page=30`,
       {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          accept: "application/json",
+          authorization: `Bearer ${accessToken}`,
         },
       }
     );
