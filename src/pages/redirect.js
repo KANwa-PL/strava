@@ -11,7 +11,7 @@ const Redirect = () => {
   // Actions
   if (authorizationStatus === "idle") {
     dispatch(getTokens());
-  } else if (authorizationStatus === "success") {
+  } else if (authorizationStatus === "fulfilled") {
     navigate("/main", { replace: true });
   }
 
@@ -20,7 +20,6 @@ const Redirect = () => {
     <div>Retrieving data...</div>
   ) : (
     <div>
-      <div>{authorizationStatus}</div>
       <div>Loading data...</div>
     </div>
   );

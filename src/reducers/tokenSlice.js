@@ -11,9 +11,7 @@ const initialToken = {
 // Slice Actions
 export const getTokens = createAsyncThunk("tokens/getTokens", async () => {
   const authorization_code = extractAuthorizationCode(window.location.href);
-  console.log("authorization_code " + authorization_code);
   const token = await getData(authorization_code);
-  console.log("token " + token.token);
   return token;
 });
 
@@ -29,7 +27,7 @@ const tokenSlice = createSlice({
         state.error = false;
       })
       .addCase(getTokens.fulfilled, (state, action) => {
-        state.status = "success";
+        state.status = "fulfilled";
         state.token = action.payload;
       })
       .addCase(getTokens.rejected, (state) => {

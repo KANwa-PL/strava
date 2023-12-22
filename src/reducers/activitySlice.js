@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getActivites } from "../utils/functions";
-import { useSelector } from "react-redux";
 
 // Initial States
 const initialActivities = {
@@ -12,9 +11,9 @@ const initialActivities = {
 // Slice Actions
 export const setActivites = createAsyncThunk(
   "activities/setActivities",
-  async () => {
-    const accessToken = useSelector((state) => state.token.token.access_token);
-    console.log("Slice call setActivities: " + accessToken);
+  async (arg, { getState }) => {
+    const state = getState();
+    const accessToken = state.token.token.access_token;
     const activities = await getActivites(accessToken);
     return activities;
   }
@@ -32,7 +31,7 @@ const activitySlice = createSlice({
         state.error = false;
       })
       .addCase(setActivites.fulfilled, (state, action) => {
-        state.status = "success";
+        state.status = "fulfilled";
         state.activities = action.payload;
       })
       .addCase(setActivites.rejected, (state) => {
@@ -43,4 +42,4 @@ const activitySlice = createSlice({
 });
 
 const { actions, reducer } = activitySlice;
-export default reducer;
+export default activitySlice.reducer;

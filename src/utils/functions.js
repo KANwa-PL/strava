@@ -62,9 +62,54 @@ export const getActivites = async (accessToken) => {
           authorization: `Bearer ${accessToken}`,
         },
       }
+    ).then((data) => data.json());
+    return response;
+  } catch (error) {
+    console.log("Error while getting athlete data: " + error);
+  }
+};
+
+export const updateActivity = async (id, accessToken) => {
+  try {
+    const response = await fetch(
+      `https://www.strava.com/api/v3/activities/${id}"`,
+      {
+        method: "PUT",
+        headers: {
+          accept: "application/json",
+          authorization: `Bearer ${accessToken}`,
+        },
+      }
     );
     return response.json();
   } catch (error) {
-    console.log("Error while getting athlete data: " + error);
+    console.log("Error while updating activity: " + error);
+  }
+};
+
+export const createActivity = async (
+  accessToken,
+  activity_name,
+  type,
+  sport_type,
+  start_date_local,
+  elapsed_time,
+  description,
+  distance
+) => {
+  try {
+    const response = await fetch(
+      `https://www.strava.com/api/v3/activities name=${activity_name} type=${type} sport_type=${sport_type} start_date_local=${start_date_local} elapsed_time=${elapsed_time} description=${description} distance=${distance} trainer=0 commute=0`,
+      {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.json();
+  } catch (error) {
+    console.log("Error while posting new activity: " + error);
   }
 };

@@ -1,0 +1,44 @@
+.container {
+  margin: auto;
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  flex: 2;
+}
+.top {
+  text-align: center;
+  justify-content: center;
+  margin: 20px;
+  margin-bottom: 0;
+  padding: 20px;
+  box-shadow: 2px 4px 10px 1px rgba(155, 155, 155, 0.47);
+  font-size: 28px;
+}
+.bottom {
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 20px;
+  margin-top: 0;
+  padding: 40px;
+  box-shadow: 2px 4px 10px 1px rgba(155, 155, 155, 0.47);
+  font-size: 28px;
+}
+.formText {
+  margin: 21px;
+  min-width: 215px;
+  max-width: 100%;
+  margin-top: 45px;
+}
+.select {
+  min-width: auto;
+  min-height: auto;
+}
+.menuListItem {
+  list-style-type: none;
+}
+.inputLabel {
+  animation-name: mui-auto-fill-cancel;
+  animation-duration: 10ms;
+}
